@@ -1,5 +1,4 @@
 #pragma once
-// Các cấu trúc dữ liệu dùng chung. KHÔNG phụ thuộc Qt.
 #include <array>
 #include <string>
 #include <vector>
