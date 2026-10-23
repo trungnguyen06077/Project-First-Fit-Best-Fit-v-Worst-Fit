@@ -59,7 +59,7 @@ int WorstFit(const std::vector<Hole>& hl, long long size){
     int failCount=0;
 
     auto t0= std::chrono::steady_clock::now();
-    
+
     for(const Request& rq : request){
        
         TraceRecord tr;
@@ -132,5 +132,7 @@ int WorstFit(const std::vector<Hole>& hl, long long size){
   }
 
 }
-
+// Contribution statement
+// Phụ trách: Sú Tường Phúc Minh (MSSV 068207002805), allocator.hpp/.cpp
+// Nội dung: FirstFit, BestFit, WorstFit, simulate (sắp xếp, cấp phát, trace, metrics).
 
