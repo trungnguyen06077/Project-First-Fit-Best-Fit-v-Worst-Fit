@@ -10,6 +10,7 @@ enum class Algorithm { FirstFit, BestFit, WorstFit };
 inline constexpr std::array<Algorithm, 3> kAllAlgorithms = {
     Algorithm::FirstFit, Algorithm::BestFit, Algorithm::WorstFit};
 
+// Tên dùng trong CSV
 inline const char* toString(Algorithm a) {
     switch (a) {
         case Algorithm::FirstFit: return "FIRST_FIT";
@@ -84,3 +85,4 @@ struct SimulationResult {
 };
 
 }  // namespace bo_nho
+
