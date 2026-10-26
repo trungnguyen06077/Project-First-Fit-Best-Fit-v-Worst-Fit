@@ -1,189 +1,166 @@
 #include "csv_io.hpp"
-#include <fstream>
-#include <sstream>
+
 #include <algorithm>
-#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 
-static std::string trim(const std::string& str) {
-    size_t first = str.find_first_not_of(" \t\r\n");
-    if (std::string::npos == first) return "";
-    size_t last = str.find_last_not_of(" \t\r\n");
-    return str.substr(first, (last - first + 1));
+namespace bo_nho {
+namespace {
+
+std::string trim(const std::string& s) {
+    size_t first = s.find_first_not_of(" \t\r\n");
+    if (first == std::string::npos) return "";
+    size_t last = s.find_last_not_of(" \t\r\n");
+    return s.substr(first, last - first + 1);
 }
 
-static void removeBOM(std::string& str) {
-    if (str.size() >= 3 && 
-        (unsigned char)str[0] == 0xEF && 
-        (unsigned char)str[1] == 0xBB && 
-        (unsigned char)str[2] == 0xBF) {
-        str = str.substr(3);
-    }
+void removeBOM(std::string& s) {
+    if (s.size() >= 3 && (unsigned char)s[0] == 0xEF && (unsigned char)s[1] == 0xBB &&
+        (unsigned char)s[2] == 0xBF)
+        s.erase(0, 3);
 }
 
-static std::vector<std::string> splitCSVRow(const std::string& row) {
-    std::vector<std::string> result;
-    std::stringstream ss(row);
+std::vector<std::string> splitRow(const std::string& row) {
+    std::vector<std::string> out;
     std::string item;
-    while (std::getline(ss, item, ',')) {
-        result.push_back(trim(item));
-    }
-    if (!row.empty() && row.back() == ',') {
-        result.push_back("");
-    }
-    return result;
+    std::stringstream ss(row);
+    while (std::getline(ss, item, ',')) out.push_back(trim(item));
+    if (!row.empty() && row.back() == ',') out.push_back("");
+    return out;
 }
 
-std::vector<Hole> readBlocks(const std::string& filename, std::string& error_msg) {
-    std::vector<Hole> holes;
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        error_msg = "Không thể mở file: " + filename;
-        return holes;
+bool parseLL(const std::string& s, long long& v) {
+    if (s.empty()) return false;
+    try {
+        size_t pos = 0;
+        v = std::stoll(s, &pos);
+        return pos == s.size();
+    } catch (...) {
+        return false;
     }
-
-    std::string header_line;
-    if (!std::getline(file, header_line)) {
-        error_msg = "File rỗng hoặc thiếu dòng tiêu đề: " + filename;
-        return holes;
-    }
-
-    removeBOM(header_line);
-    std::vector<std::string> headers = splitCSVRow(header_line);
-
-    int idx_id = -1, idx_start = -1, idx_size = -1;
-    for (size_t i = 0; i < headers.size(); ++i) {
-        if (headers[i] == "block_id") idx_id = i;
-        else if (headers[i] == "start") idx_start = i;
-        else if (headers[i] == "size") idx_size = i;
-    }
-
-    if (idx_id == -1 || idx_start == -1 || idx_size == -1) {
-        error_msg = "File CSV thiếu hoặc sai tên cột bắt buộc (block_id, start, size)";
-        return holes;
-    }
-
-    std::string line;
-    int line_num = 1;
-    while (std::getline(file, line)) {
-        line_num++;
-        line = trim(line);
-        if (line.empty()) continue; 
-
-        std::vector<std::string> row = splitCSVRow(line);
-        if (row.size() < std::max({idx_id, idx_start, idx_size}) + 1) {
-            error_msg = "Dòng " + std::to_string(line_num) + " bị thiếu trường dữ liệu.";
-            return holes;
-        }
-
-        try {
-            Hole h;
-            h.block_id = row[idx_id];
-            h.start = std::stoi(row[idx_start]);
-            h.size = std::stoi(row[idx_size]);
-            holes.push_back(h);
-        } catch (...) {
-            error_msg = "Dòng " + std::to_string(line_num) + " chứa dữ liệu sai định dạng số.";
-            return holes;
-        }
-    }
-    return holes;
 }
 
-std::vector<Request> readRequests(const std::string& filename, std::string& error_msg) {
-    std::vector<Request> requests;
+int findCol(const std::vector<std::string>& headers, std::initializer_list<const char*> names) {
+    for (size_t i = 0; i < headers.size(); ++i)
+        for (const char* n : names)
+            if (headers[i] == n) return (int)i;
+    return -1;
+}
+
+std::string lineErr(const std::string& file, int line, const std::string& msg) {
+    return file + ", dong " + std::to_string(line) + ": " + msg;
+}
+
+}  // namespace
+
+bool readBlocks(const std::string& filename, std::vector<Hole>& out, std::string& error) {
+    out.clear();
     std::ifstream file(filename);
-    if (!file.is_open()) {
-        error_msg = "Không thể mở file: " + filename;
-        return requests;
-    }
+    if (!file.is_open()) { error = "Khong the mo file: " + filename; return false; }
 
-    std::string header_line;
-    if (!std::getline(file, header_line)) {
-        error_msg = "File rỗng hoặc thiếu dòng tiêu đề: " + filename;
-        return requests;
-    }
+    std::string header;
+    if (!std::getline(file, header)) { error = "File rong hoac thieu dong tieu de: " + filename; return false; }
+    removeBOM(header);
+    auto headers = splitRow(trim(header));
 
-    removeBOM(header_line);
-    std::vector<std::string> headers = splitCSVRow(header_line);
-
-    int idx_order = -1, idx_pid = -1, idx_size = -1;
-    for (size_t i = 0; i < headers.size(); ++i) {
-        if (headers[i] == "order") idx_order = i;
-        else if (headers[i] == "process_id") idx_pid = i;
-        else if (headers[i] == "size") idx_size = i;
+    int iId = findCol(headers, {"block_id", "id"});
+    int iStart = findCol(headers, {"start"});
+    int iSize = findCol(headers, {"size"});
+    if (iId < 0 || iStart < 0 || iSize < 0) {
+        error = filename + ": thieu cot bat buoc (block_id, start, size)";
+        return false;
     }
-
-    if (idx_order == -1 || idx_pid == -1 || idx_size == -1) {
-        error_msg = "File CSV thiếu hoặc sai tên cột bắt buộc (order, process_id, size)";
-        return requests;
-    }
+    size_t need = (size_t)std::max({iId, iStart, iSize}) + 1;
 
     std::string line;
-    int line_num = 1;
+    int lineNum = 1;
     while (std::getline(file, line)) {
-        line_num++;
+        ++lineNum;
         line = trim(line);
         if (line.empty()) continue;
-
-        std::vector<std::string> row = splitCSVRow(line);
-        if (row.size() < std::max({idx_order, idx_pid, idx_size}) + 1) {
-            error_msg = "Dòng " + std::to_string(line_num) + " bị thiếu trường dữ liệu.";
-            return requests;
+        auto row = splitRow(line);
+        if (row.size() < need) { error = lineErr(filename, lineNum, "thieu truong du lieu"); return false; }
+        Hole h;
+        h.id = row[iId];
+        h.line = lineNum;
+        if (!parseLL(row[iStart], h.start) || !parseLL(row[iSize], h.size)) {
+            error = lineErr(filename, lineNum, "du lieu sai dinh dang so");
+            return false;
         }
-
-        try {
-            Request r;
-            r.order = std::stoi(row[idx_order]);
-            r.process_id = row[idx_pid];
-            r.size = std::stoi(row[idx_size]);
-            requests.push_back(r);
-        } catch (...) {
-            error_msg = "Dòng " + std::to_string(line_num) + " chứa dữ liệu sai định dạng số.";
-            return requests;
-        }
-    }
-    return requests;
-}
-
-bool writeTrace(const std::string& filename, const std::vector<TraceRecord>& records, std::string& error_msg) {
-    std::ofstream file(filename);
-    if (!file.is_open()) {
-        error_msg = "Không thể tạo hoặc ghi file: " + filename;
-        return false;
-    }
-
-    file << "step,algorithm,process_id,request_size,block_id,alloc_start,block_size_before,block_size_after,status\n";
-
-    for (const auto& r : records) {
-        file << r.step << ","
-             << r.algorithm << ","
-             << r.process_id << ","
-             << r.request_size << ","
-             << r.block_id << ","       
-             << r.alloc_start << ","    
-             << r.block_size_before << ","
-             << r.block_size_after << ","
-             << r.status << "\n";
+        out.push_back(h);
     }
     return true;
 }
 
-bool writeSummary(const std::string& filename, const std::vector<SummaryRecord>& records, std::string& error_msg) {
-    std::ofstream file(filename);
-    if (!file.is_open()) {
-        error_msg = "Không thể tạo hoặc ghi file: " + filename;
+bool readRequests(const std::string& filename, std::vector<Request>& out, std::string& error) {
+    out.clear();
+    std::ifstream file(filename);
+    if (!file.is_open()) { error = "Khong the mo file: " + filename; return false; }
+
+    std::string header;
+    if (!std::getline(file, header)) { error = "File rong hoac thieu dong tieu de: " + filename; return false; }
+    removeBOM(header);
+    auto headers = splitRow(trim(header));
+
+    int iOrder = findCol(headers, {"order"});
+    int iPid = findCol(headers, {"process_id"});
+    int iSize = findCol(headers, {"size"});
+    if (iOrder < 0 || iPid < 0 || iSize < 0) {
+        error = filename + ": thieu cot bat buoc (order, process_id, size)";
         return false;
     }
+    size_t need = (size_t)std::max({iOrder, iPid, iSize}) + 1;
+
+    std::string line;
+    int lineNum = 1;
+    while (std::getline(file, line)) {
+        ++lineNum;
+        line = trim(line);
+        if (line.empty()) continue;
+        auto row = splitRow(line);
+        if (row.size() < need) { error = lineErr(filename, lineNum, "thieu truong du lieu"); return false; }
+        Request r;
+        long long order = 0;
+        r.processId = row[iPid];
+        r.line = lineNum;
+        if (!parseLL(row[iOrder], order) || !parseLL(row[iSize], r.size)) {
+            error = lineErr(filename, lineNum, "du lieu sai dinh dang so");
+            return false;
+        }
+        r.order = (int)order;
+        out.push_back(r);
+    }
+    return true;
+}
+
+bool writeTrace(const std::string& filename, const std::vector<TraceRecord>& records, std::string& error) {
+    std::ofstream file(filename);
+    if (!file.is_open()) { error = "Khong the tao hoac ghi file: " + filename; return false; }
+
+    file << "step,algorithm,process_id,request_size,block_id,alloc_start,"
+            "block_size_before,block_size_after,status\n";
+    for (const auto& r : records) {
+        file << r.step << ',' << toString(r.algorithm) << ',' << r.processId << ',' << r.requestSize << ',';
+        if (r.allocated)
+            file << r.blockId << ',' << r.allocStart << ',' << r.sizeBefore << ',' << r.sizeAfter << ",ALLOCATED\n";
+        else
+            file << ",,,,FAILED\n";
+    }
+    return file.good();
+}
+
+bool writeSummary(const std::string& filename, const std::vector<Metrics>& records, std::string& error) {
+    std::ofstream file(filename);
+    if (!file.is_open()) { error = "Khong the tao hoac ghi file: " + filename; return false; }
 
     file << "algorithm,allocated,failed,total_free,largest_free,time_us\n";
-
-    for (const auto& r : records) {
-        file << r.algorithm << ","
-             << r.allocated << ","
-             << r.failed << ","
-             << r.total_free << ","
-             << r.largest_free << ","
-             << r.time_us << "\n";
+    file << std::fixed << std::setprecision(2);
+    for (const auto& m : records) {
+        file << toString(m.algorithm) << ',' << m.allocated << ',' << m.failed << ',' << m.totalFree << ','
+             << m.largestFree << ',' << m.timeUs << '\n';
     }
-    return true;
+    return file.good();
 }
+
+}  // namespace bo_nho
