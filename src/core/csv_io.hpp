@@ -1,48 +1,18 @@
-#ifndef CSV_IO_HPP
-#define CSV_IO_HPP
-
+#pragma once
 #include <string>
 #include <vector>
 
-struct Hole {
-    std::string block_id;
-    int start;
-    int size;
-};
+#include "models.hpp"
 
-struct Request {
-    int order;
-    std::string process_id;
-    int size;
-};
+namespace bo_nho {
 
-struct TraceRecord {
-    int step;
-    std::string algorithm;
-    std::string process_id;
-    int request_size;
-    std::string block_id;       
-    std::string alloc_start;    
-    int block_size_before;
-    int block_size_after;
-    std::string status;         
-};
+bool readBlocks(const std::string& filename, std::vector<Hole>& out, std::string& error);
 
-struct SummaryRecord {
-    std::string algorithm;
-    int allocated;
-    int failed;
-    int total_free;
-    int largest_free;
-    long long time_us;
-};
+bool readRequests(const std::string& filename, std::vector<Request>& out, std::string& error);
 
-std::vector<Hole> readBlocks(const std::string& filename, std::string& error_msg);
+bool writeTrace(const std::string& filename, const std::vector<TraceRecord>& records, std::string& error);
 
-std::vector<Request> readRequests(const std::string& filename, std::string& error_msg);
 
-bool writeTrace(const std::string& filename, const std::vector<TraceRecord>& records, std::string& error_msg);
+bool writeSummary(const std::string& filename, const std::vector<Metrics>& records, std::string& error);
 
-bool writeSummary(const std::string& filename, const std::vector<SummaryRecord>& records, std::string& error_msg);
-
-#endif 
+}
