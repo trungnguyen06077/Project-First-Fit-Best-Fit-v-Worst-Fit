@@ -135,6 +135,7 @@ memory-allocation-sim/
 │   ├── core/                  # Thuật toán + CSV (KHÔNG dùng Qt)
 │   │   ├── models.hpp         # Hole, Request, TraceRecord, Metrics
 │   │   ├── allocator.hpp/.cpp # First-Fit, Best-Fit, Worst-Fit
+│   │   ├── generator.hpp/.cpp
 │   │   ├── csv_io.hpp/.cpp    # Đọc / ghi CSV
 │   │   └── validator.hpp/.cpp # Kiểm tra dữ liệu đầu vào
 │   └── gui/                   # Giao diện Qt
