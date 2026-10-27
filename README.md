@@ -104,8 +104,6 @@ SIMULATE(holes, requests, strategy):
             if h.size == 0: xóa h khỏi holes
 ```
 
-Flowchart: `docs/flowchart_first_fit.png`, `docs/flowchart_best_fit.png`, `docs/flowchart_worst_fit.png`.
-
 ---
 
 ## 6. Yêu cầu kỹ thuật
