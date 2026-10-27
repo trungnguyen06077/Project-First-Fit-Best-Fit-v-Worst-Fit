@@ -36,8 +36,8 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 |---|---|---|
 | 1 | Phân tích yêu cầu, phân vai, tạo repo, chọn thư viện GUI | ✓ |
 | 2 | Pseudocode/flowchart, định nghĩa định dạng CSV, kế hoạch kiểm thử |✓|
-| 3–4 | Cài đặt lõi thuật toán (`src/core`) + unit test | ✓ |
-| 5 | GUI, đọc/ghi CSV, kiểm tra dữ liệu, xử lý lỗi | ☐ |
+| 3–4 | Cài đặt lõi thuật toán (`src/core`)  | ✓ |
+| 5 | GUI, đọc/ghi CSV, kiểm tra dữ liệu, xử lý lỗi + unit test| ☐ |
 | 6 | Kiểm thử tích hợp, edge case, đo hiệu năng | ☐ |
 | 7 | Hoàn thiện, review chéo, sửa lỗi | ☐ |
 | 8 | Báo cáo, quay video demo, trình bày | ☐ |
