@@ -18,7 +18,7 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 
 | MSSV | Họ tên | Vai trò | Phụ trách chính |
 |---|---|---|---|
-| `068207013575` | `Nguyễn Văn Trung` | Nhóm Trưởng | Phân việc, models.hpp |
+| `068207013575` | `Nguyễn Văn Trung` | Nhóm Trưởng | Phân việc,READme.md, models.hpp |
 | `089207010161` | `Trần Lê Phước Gia Hưng` | Thành viên | csv_io.hpp/.cpp |
 | `089207017978` | `Nguyễn Thế Vinh` | Thành viên | validator.hpp/.cpp |
 | `079207020882` | `Trịnh Hoàng Hải` | Thành viên  | generator.hpp/cpp |
@@ -34,9 +34,9 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 
 | Tuần | Nội dung | Xong |
 |---|---|---|
-| 1 | Phân tích yêu cầu, phân vai, tạo repo, chọn thư viện GUI | ☐ |
-| 2 | Pseudocode/flowchart, định nghĩa định dạng CSV, kế hoạch kiểm thử | ☐ |
-| 3–4 | Cài đặt lõi thuật toán (`src/core`) + unit test | ☐ |
+| 1 | Phân tích yêu cầu, phân vai, tạo repo, chọn thư viện GUI | ✓ |
+| 2 | Pseudocode/flowchart, định nghĩa định dạng CSV, kế hoạch kiểm thử |✓|
+| 3–4 | Cài đặt lõi thuật toán (`src/core`) + unit test | ✓ |
 | 5 | GUI, đọc/ghi CSV, kiểm tra dữ liệu, xử lý lỗi | ☐ |
 | 6 | Kiểm thử tích hợp, edge case, đo hiệu năng | ☐ |
 | 7 | Hoàn thiện, review chéo, sửa lỗi | ☐ |
