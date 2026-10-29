@@ -40,7 +40,7 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 | 5 | GUI, đọc/ghi CSV, kiểm tra dữ liệu, xử lý lỗi + unit test| ☐ |
 | 6 | Kiểm thử tích hợp, edge case, đo hiệu năng | ☐ |
 | 7 | Hoàn thiện, review chéo, sửa lỗi | ☐ |
-| 8 | Báo cáo, quay video demo, trình bày | ☐ |
+| 8 | Báo cáo, trình bày | ☐ |
 
 ---
 
