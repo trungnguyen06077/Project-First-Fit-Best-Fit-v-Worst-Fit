@@ -18,7 +18,7 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 
 | MSSV | Họ tên | Vai trò | Phụ trách chính |
 |---|---|---|---|
-| `068207013575` | `Nguyễn Văn Trung` | Nhóm Trưởng | Phân việc,READme.md, models.hpp |
+| `068207013575` | `Nguyễn Văn Trung` | Nhóm Trưởng | Phân việc, models.hpp, main.cpp|
 | `089207010161` | `Trần Lê Phước Gia Hưng` | Thành viên | csv_io.hpp/.cpp |
 | `089207017978` | `Nguyễn Thế Vinh` | Thành viên | validator.hpp/.cpp |
 | `079207020882` | `Trịnh Hoàng Hải` | Thành viên  | generator.hpp/cpp |
