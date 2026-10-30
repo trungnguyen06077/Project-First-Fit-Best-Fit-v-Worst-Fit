@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Thư viện lõi 
 add_library(memsim_core
-    core/allocator.cpp
-    core/csv_io.cpp
-    core/generator.cpp
-    core/validator.cpp)
-target_include_directories(memsim_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+    src/core/allocator.cpp
+    src/core/csv_io.cpp
+    src/core/generator.cpp
+    src/core/validator.cpp)
+target_include_directories(memsim_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(memsim main.cpp)
+add_executable(memsim src/main.cpp)
 target_link_libraries(memsim PRIVATE memsim_core)
