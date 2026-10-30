@@ -12,5 +12,5 @@ add_library(memsim_core
     src/core/validator.cpp)
 target_include_directories(memsim_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(memsim src/main.cpp)
+add_executable(memsim src/gui/main.cpp)
 target_link_libraries(memsim PRIVATE memsim_core)
