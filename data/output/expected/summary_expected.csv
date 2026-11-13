@@ -1,0 +1,4 @@
+algorithm,allocated,failed,total_free,largest_free
+FIRST_FIT,3,1,959,300
+BEST_FIT,4,0,533,174
+WORST_FIT,3,1,959,300

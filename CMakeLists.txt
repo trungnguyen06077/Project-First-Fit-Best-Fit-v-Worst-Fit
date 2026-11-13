@@ -14,3 +14,7 @@ target_include_directories(memsim_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(memsim src/gui/main.cpp)
 target_link_libraries(memsim PRIVATE memsim_core)
+  enable_testing()
+  add_executable(test_main tests/test_main.cpp)
+  target_link_libraries(test_main PRIVATE memsim_core)
+  add_test(NAME core_tests COMMAND test_main ${CMAKE_SOURCE_DIR}/data)
