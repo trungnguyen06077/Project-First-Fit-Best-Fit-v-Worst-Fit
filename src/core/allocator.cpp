@@ -134,7 +134,4 @@ int WorstFit(const std::vector<Hole>& hl, long long size){
 }
 // Contribution statement
 // Phụ trách: Sú Tường Phúc Minh (MSSV 068207002805), allocator.hpp/.cpp
-HEAD
 // Nội dung: FirstFit, BestFit, WorstFit, simulate (sắp xếp, cấp phát, trace, metrics).
-// Nội dung: FirstFit, BestFit, WorstFit, simulate (sắp xếp, cấp phát, trace, metrics).
-43f4a87 (Update core and GUI files)

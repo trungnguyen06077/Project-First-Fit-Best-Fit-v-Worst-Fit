@@ -16,6 +16,8 @@
 #include "core/models.hpp"
 #include "core/validator.hpp"
 
+class MemoryView;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -43,6 +45,7 @@ private:
     QPushButton *btnRunSim;
     
     QComboBox *comboAlgo;
+    MemoryView *memoryView;
     QTableWidget *tableResult;
     
     QLabel *lblStatus;

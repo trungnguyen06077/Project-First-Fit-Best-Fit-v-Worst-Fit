@@ -1,0 +1,5 @@
+step,algorithm,process_id,request_size,block_id,alloc_start,block_size_before,block_size_after,status
+1,FIRST_FIT,P1,212,B2,150,500,288,ALLOCATED
+2,FIRST_FIT,P2,417,B5,1300,600,183,ALLOCATED
+3,FIRST_FIT,P3,112,B2,362,288,176,ALLOCATED
+4,FIRST_FIT,P4,426,,,,,FAILED

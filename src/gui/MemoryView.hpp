@@ -15,7 +15,7 @@ class MemoryView : public QWidget {
 public:
     explicit MemoryView(QWidget* cha = nullptr);
 
-    void datDuLieu(const std::vector<Hole>& danhSachHoleMoi, const std::vector<Allocation>& danhSachCapPhatMoi);
+    void datDuLieu(const std::vector<bo_nho::Hole>& danhSachHoleMoi, const std::vector<bo_nho::Allocation>& danhSachCapPhatMoi);
     void xoaDuLieu();
 
 protected:
@@ -25,6 +25,6 @@ private:
     QColor layMauTheoTienTrinh(const std::string& process_id) const;
     long long tinhTongDiaChi() const;
 
-    std::vector<Hole> danhSachHole;
-    std::vector<Allocation> danhSachCapPhat;
+    std::vector<bo_nho::Hole> danhSachHole;
+    std::vector<bo_nho::Allocation> danhSachCapPhat;
 };

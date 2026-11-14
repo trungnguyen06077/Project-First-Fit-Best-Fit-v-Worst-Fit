@@ -14,4 +14,3 @@ int WorstFit(const std::vector<Hole>& hl, long long size);
 
 SimulationResult simulate(std::vector<Hole> holes, std::vector<Request> request, Algorithm algo);
 }
-}

@@ -1,4 +1,5 @@
 #include "MainWindow.hpp"
+#include "MemoryView.hpp"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUI();
@@ -36,6 +37,8 @@ void MainWindow::setupUI() {
     lblStatus = new QLabel("Trang thai: San sang. Hay nap day du file du lieu.", this);
     lblMetrics = new QLabel("Hieu nang: Thoi gian: 0 us | Thanh cong: 0 | That bai: 0 | Con trong: 0 KB", this);
 
+    memoryView = new MemoryView(this);
+
     tableResult = new QTableWidget(this);
     tableResult->setColumnCount(8);
     QStringList headers = {"Step", "Process ID", "Size Req (KB)", "Allocated", "Block ID", "Alloc Start", "Size Before", "Size After"};
@@ -70,7 +73,8 @@ void MainWindow::setupUI() {
     mainLayout->addLayout(row4);
 
     mainLayout->addWidget(lblStatus);
-    mainLayout->addWidget(tableResult);
+    mainLayout->addWidget(memoryView);
+    mainLayout->addWidget(tableResult, 1);
     mainLayout->addWidget(lblMetrics);
 
     QWidget *centralWidget = new QWidget(this);
@@ -78,7 +82,7 @@ void MainWindow::setupUI() {
     this->setCentralWidget(centralWidget);
 
     connect(btnSelectHoles, &QPushButton::clicked, this, &MainWindow::handleSelectHolesFile);
-    connect(btnSelectRequests, &QPushButton::clicked, this, &QPushButton::clicked, this, &MainWindow::handleSelectRequestsFile);
+    connect(btnSelectRequests, &QPushButton::clicked, this, &MainWindow::handleSelectRequestsFile);
     connect(btnSelectOutputDir, &QPushButton::clicked, this, &MainWindow::handleSelectOutputDir);
     connect(btnRunSim, &QPushButton::clicked, this, &MainWindow::handleRunSimulation);
 }
@@ -94,7 +98,7 @@ void MainWindow::handleSelectRequestsFile() {
 }
 
 void MainWindow::handleSelectOutputDir() {
-    QString dir = QFileDialog::getExistingDirectory(this, "Chon thu muc luu ket qua xuat bản", "");
+    QString dir = QFileDialog::getExistingDirectory(this, "Chon thu muc luu ket qua xuat ban", "");
     if (!dir.isEmpty()) txtOutputDirPath->setText(dir);
 }
 
@@ -136,6 +140,7 @@ void MainWindow::handleRunSimulation() {
     bo_nho::SimulationResult result = bo_nho::simulate(holes, reqs, selectedAlgo);
 
     updateTableDisplay(result);
+    memoryView->datDuLieu(holes, result.allocations);
 
     QString metricsText = QString("Thoi gian: %1 us | Thanh cong: %2 | That bai: %3 | Con trong: %4 KB (Lon nhat: %5 KB)")
                           .arg(result.metrics.timeUs)
