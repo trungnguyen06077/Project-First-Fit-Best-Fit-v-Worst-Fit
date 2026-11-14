@@ -85,4 +85,3 @@ struct SimulationResult {
 };
 
 }  // namespace bo_nho
-

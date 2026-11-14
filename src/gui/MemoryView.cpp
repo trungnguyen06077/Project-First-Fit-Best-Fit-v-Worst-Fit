@@ -9,7 +9,7 @@ MemoryView::MemoryView(QWidget* cha) : QWidget(cha) {
     setMinimumHeight(140);
 }
 
-void MemoryView::datDuLieu(const std::vector<Hole>& danhSachHoleMoi, const std::vector<Allocation>& danhSachCapPhatMoi) {
+void MemoryView::datDuLieu(const std::vector<bo_nho::Hole>& danhSachHoleMoi, const std::vector<bo_nho::Allocation>& danhSachCapPhatMoi) {
     danhSachHole = danhSachHoleMoi;
     danhSachCapPhat = danhSachCapPhatMoi;
     update();
@@ -96,13 +96,13 @@ void MemoryView::paintEvent(QPaintEvent* suKien) {
             rong = 1;
         }
         QRect khung(x, tren, rong, caoThanh);
-        veTranh.fillRect(khung, layMauTheoTienTrinh(danhSachCapPhat[i].process_id));
+        veTranh.fillRect(khung, layMauTheoTienTrinh(danhSachCapPhat[i].processId));
         veTranh.setPen(Qt::black);
         veTranh.drawRect(khung);
 
         veTranh.save();
         veTranh.setClipRect(khung);
-        veTranh.drawText(khung, Qt::AlignCenter, QString::fromStdString(danhSachCapPhat[i].process_id));
+        veTranh.drawText(khung, Qt::AlignCenter, QString::fromStdString(danhSachCapPhat[i].processId));
         veTranh.restore();
     }
 

@@ -12,4 +12,4 @@ std::vector<Request> generateRequests(int numRequests, int minSize, int maxSize,
 bool writeHolesToCSV(const std::string& filepath, const std::vector<Hole>& holes);
 bool writeRequestsToCSV(const std::string& filepath, const std::vector<Request>& requests);
 
-} 
+}  // namespace bo_nho
