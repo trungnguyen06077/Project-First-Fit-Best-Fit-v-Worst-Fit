@@ -22,7 +22,7 @@ Nhóm **5 sinh viên**, thực hiện trong khoảng **8 tuần**.
 | `089207010161` | `Trần Lê Phước Gia Hưng` | Thành viên | csv_io.hpp/.cpp, MainWindown.hpp/cpp |
 | `089207017978` | `Nguyễn Thế Vinh` | Thành viên | validator.hpp/.cpp, MemoryView.hpp/cpp |
 | `079207020882` | `Trịnh Hoàng Hải` | Thành viên  | generator.hpp/cpp, data |
-| `068207002805` | `Sú Tường Phúc Minh` | Thành viên | allocator.hpp/.cpp, CMakeLists.txt, tests |
+| `068207002805` | `Sú Tường Phúc Minh` | Thành viên | allocator.hpp/.cpp, tests |
 
 | Thông tin | Nội dung |
 |---|---|
