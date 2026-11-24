@@ -178,6 +178,7 @@ void MainWindow::updateTableDisplay(const bo_nho::SimulationResult& sr) {
             
             for(int col=0; col<8; ++col) {
                 tableResult->item(i, col)->setBackground(QColor(230, 245, 230));
+                tableResult->item(i, col)->setForeground(QColor(0,0,0));
             }
         } else {
             tableResult->setItem(i, 4, new QTableWidgetItem("-"));
@@ -187,6 +188,7 @@ void MainWindow::updateTableDisplay(const bo_nho::SimulationResult& sr) {
             
             for(int col=0; col<8; ++col) {
                 tableResult->item(i, col)->setBackground(QColor(255, 230, 230));
+                tableResult->item(i, col)->setForeground(QColor(0,0,0));
             }
         }
     }
